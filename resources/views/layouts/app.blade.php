@@ -1,9 +1,14 @@
+{{-- ================================================
+FILE: resources/views/layouts/app.blade.php
+FUNGSI: Master layout untuk halaman customer/publik
+================================================ --}}
+
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     {{-- CSRF Token untuk AJAX --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -25,32 +30,34 @@
     {{-- Stack untuk CSS tambahan per halaman --}}
     @stack('styles')
 </head>
+
 <body>
     {{-- ============================================
-         NAVBAR
-         ============================================ --}}
-    @include('profile.partials.navbar')
+    NAVBAR
+    ============================================ --}}
+    @include('partials.navbar')
 
     {{-- ============================================
-         FLASH MESSAGES
-         ============================================ --}}
+    FLASH MESSAGES
+    ============================================ --}}
     <div class="container mt-3">
-        @include('profile.partials.flash-messages')
+        @include('partials.flash-messages')
     </div>
 
     {{-- ============================================
-         MAIN CONTENT
-         ============================================ --}}
+    MAIN CONTENT
+    ============================================ --}}
     <main class="min-vh-100">
         @yield('content')
     </main>
 
     {{-- ============================================
-         FOOTER
-         ============================================ --}}
-    @include('profile.partials.footer')
+    FOOTER
+    ============================================ --}}
+    @include('partials.footer')
 
     {{-- Stack untuk JS tambahan per halaman --}}
     @stack('scripts')
 </body>
+
 </html>
