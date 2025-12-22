@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CheckoutController;
@@ -71,10 +72,10 @@ Route::middleware(['auth', 'admin'])
         // CRUD Produk: /admin/products, /admin/products/create, dll
         Route::resource('/products', ProductController::class);
         // Produk CRUD
-        Route::resource('products', AdminProductController::class);
+        Route::resource('products', ProductController::class);
 
         // Kategori CRUD
-        Route::resource('categories', AdminCategoryController::class);
+        Route::resource('categories', CategoryController::class);
 
         // Manajemen Pesanan
         Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
@@ -112,4 +113,15 @@ Route::controller(GoogleController::class)->group(function () {
     // ================================================
     Route::get('/auth/google/callback', 'callback')
         ->name('auth.google.callback');
+});
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Kategori
+    Route::resource('categories', CategoryController::class)->except(['show']); // Kategori biasanya tidak butuh show detail page
+
+    // Produk
+    Route::resource('products', ProductController::class);
+
+    // Route tambahan untuk AJAX Image Handling (jika diperlukan)
+    // ...
 });
