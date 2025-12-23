@@ -62,10 +62,10 @@
 
                         {{-- Price --}}
                         <h5 class="text-primary fw-bold mb-3">
-                            Rp {{ number_format($product->price, 0, ',', '.') }}
+                            Rp {{ number_format($product->discount_price, 0, ',', '.') }}
                             @if($product->discount_price)
                             <span class="text-muted fs-6 text-decoration-line-through ms-2">
-                                Rp {{ number_format($product->discount_price, 0, ',', '.') }}
+                                Rp {{ number_format($product->price, 0, ',', '.') }}
                             </span>
                             @endif
                         </h5>
@@ -87,7 +87,7 @@
 
                         {{-- Description --}}
                         <p class="mb-4">
-                            {{ $product->description ?: '-' }}
+                            {!! $product->description ?: '-' !!}
                         </p>
 
                         {{-- Meta --}}

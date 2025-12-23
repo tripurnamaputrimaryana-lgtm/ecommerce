@@ -1,20 +1,14 @@
-{{-- ======================================== FILE:
-resources/views/auth/login.blade.php FUNGSI: Halaman form login
-======================================== --}}
 @extends('layouts.app')
-{{-- ↑ Menggunakan layout dari layouts/app.blade.php Halaman ini akan "masuk" ke bagian
-@yield('content') --}}
-@section('content')
-{{-- ↑ Mulai section yang akan ditampilkan di @yield('content') --}}
 
+@section('content')
 <style>
-    body.login-bg {
+    body.register-bg {
         min-height: 100vh;
         background: linear-gradient(135deg, #2563eb 0%, #fbbf24 100%);
         background-attachment: fixed;
     }
 
-    .login-glass {
+    .register-glass {
         background: rgba(255, 255, 255, 0.85);
         box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
         border-radius: 2rem;
@@ -22,7 +16,7 @@ resources/views/auth/login.blade.php FUNGSI: Halaman form login
         backdrop-filter: blur(8px);
     }
 
-    .login-btn {
+    .register-btn {
         background: linear-gradient(90deg, #2563eb 0%, #fbbf24 100%);
         border: none;
         color: #fff;
@@ -31,44 +25,55 @@ resources/views/auth/login.blade.php FUNGSI: Halaman form login
         transition: background 0.2s;
     }
 
-    .login-btn:hover {
+    .register-btn:hover {
         background: linear-gradient(90deg, #1d4ed8 0%, #f59e0b 100%);
         color: #fff;
     }
 
-    .login-link {
+    .register-link {
         color: #2563eb;
         font-weight: 600;
     }
 
-    .login-link:hover {
+    .register-link:hover {
         color: #fbbf24;
         text-decoration: underline;
     }
 </style>
 <script>
-    document.body.classList.add('login-bg');
+    document.body.classList.add('register-bg');
 </script>
 <div class="container py-5">
     <div class="row justify-content-center align-items-center min-vh-100">
         <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center">
-            <img src="https://cdn.jsdelivr.net/gh/undraw/undraw@master/static/undraw_secure_login_pdn4.svg"
-                alt="Login Illustration" class="img-fluid w-75 rounded-4 shadow-lg"
+            <img src="https://cdn.jsdelivr.net/gh/undraw/undraw@master/static/undraw_sign_up_n6im.svg"
+                alt="Register Illustration" class="img-fluid w-75 rounded-4 shadow-lg"
                 style="background:rgba(255,255,255,0.2);" loading="lazy">
         </div>
         <div class="col-lg-5 col-md-8">
-            <div class="login-glass p-5 animate__animated animate__fadeInDown">
+            <div class="register-glass p-5 animate__animated animate__fadeInDown">
                 <div class="text-center mb-4">
                     <img src="{{ asset('favicon.ico') }}" width="48" class="mb-2" alt="Logo">
-                    <h3 class="fw-bold mb-1" style="color:#2563eb">Selamat Datang!</h3>
-                    <p class="text-muted">Masuk ke akun kamu untuk mulai belanja.</p>
+                    <h3 class="fw-bold mb-1" style="color:#2563eb">Buat Akun Baru</h3>
+                    <p class="text-muted">Daftar untuk mulai belanja di toko kami.</p>
                 </div>
-                <form method="POST" action="{{ route('login') }}">
+                <form method="POST" action="{{ route('register') }}">
                     @csrf
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nama Lengkap</label>
+                        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
+                            name="name" value="{{ old('name') }}" required autocomplete="name" autofocus
+                            placeholder="Nama lengkap">
+                        @error('name')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                            name="email" value="{{ old('email') }}" required autocomplete="email" autofocus
+                            name="email" value="{{ old('email') }}" required autocomplete="email"
                             placeholder="nama@email.com">
                         @error('email')
                         <span class="invalid-feedback" role="alert">
@@ -80,74 +85,41 @@ resources/views/auth/login.blade.php FUNGSI: Halaman form login
                         <label for="password" class="form-label">Password</label>
                         <input id="password" type="password"
                             class="form-control @error('password') is-invalid @enderror" name="password" required
-                            autocomplete="current-password" placeholder="••••••••" />
+                            autocomplete="new-password" placeholder="Minimal 8 karakter">
                         @error('password')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                         @enderror
                     </div>
-                    <div class="mb-3 form-check">
-                        <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember')
-                            ? 'checked' : '' }}>
-                        <label class="form-check-label" for="remember">
-                            Ingat Saya
-                        </label>
+                    <div class="mb-3">
+                        <label for="password-confirm" class="form-label">Konfirmasi Password</label>
+                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation"
+                            required autocomplete="new-password" placeholder="Ulangi password">
                     </div>
                     <div class="d-grid gap-2 mb-3">
-                        <button type="submit" class="btn login-btn btn-lg shadow-sm">
-                            <i class="bi bi-box-arrow-in-right me-2"></i> Login
+                        <button type="submit" class="btn register-btn btn-lg shadow-sm">
+                            <i class="bi bi-person-plus me-2"></i> Daftar
                         </button>
-                    </div>
-                    <div class="text-center mb-3">
-                        @if (Route::has('password.request'))
-                        <a class="login-link small" href="{{ route('password.request') }}">
-                            <i class="bi bi-question-circle"></i> Lupa Password?
-                        </a>
-                        @endif
                     </div>
                     <div class="position-relative my-4">
                         <hr />
                         <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small">
-                            atau login dengan
+                            atau daftar dengan
                         </span>
                     </div>
-                    <div class="d-grid mb-3">
+                    <div class="d-grid gap-2 mb-3">
                         <a href="{{ route('auth.google') }}"
-                            class="btn btn-google-login btn-lg d-flex align-items-center justify-content-center gap-2">
-                            <span
-                                class="d-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm me-2"
-                                style="width:36px;height:36px;">
-                                <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="22" height="22"
-                                    alt="Google" />
-                            </span>
-                            <span class="flex-grow-1 text-center fw-semibold" style="color:#2563eb;">Login dengan
-                                Google</span>
+                            class="btn btn-outline-warning btn-lg text-primary fw-bold border-2"
+                            style="border-color:#fbbf24 !important;">
+                            <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" class="me-2" />
+                            Daftar dengan Google
                         </a>
                     </div>
-                    <style>
-                        .btn-google-login {
-                            background: #fffbe7;
-                            border: 2px solid #fbbf24;
-                            color: #2563eb;
-                            font-weight: 600;
-                            transition: background 0.2s, border 0.2s;
-                        }
-
-                        .btn-google-login:hover {
-                            background: #fbbf24;
-                            color: #2563eb;
-                            border-color: #2563eb;
-                        }
-
-                        .btn-google-login img {
-                            display: block;
-                        }
-                    </style>
                     <p class="mt-4 text-center mb-0">
-                        Belum punya akun?
-                        <a href="{{ route('register') }}" class="login-link fw-bold">
-                            Daftar Sekarang
+                        Sudah punya akun?
+                        <a href="{{ route('login') }}" class="register-link fw-bold">
+                            Login
                         </a>
                     </p>
                 </form>
@@ -155,4 +127,4 @@ resources/views/auth/login.blade.php FUNGSI: Halaman form login
         </div>
     </div>
 </div>
-@endsection {{-- ↑ Akhir dari section content --}}
+@endsection
