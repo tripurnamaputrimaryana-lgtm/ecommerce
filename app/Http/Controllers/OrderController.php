@@ -21,15 +21,39 @@ class OrderController extends Controller
     /**
      * Detail order tertentu
      */
-    public function show($id)
-    {
-        $order = Order::with('items.product') // load produk dari setiap item
-            ->where('id', $id)
-            ->where('user_id', Auth::id())
-            ->firstOrFail();
+   public function show($id)
+{
+    $order = Order::with('items.product')
+        ->where('id', $id)
+        ->where('user_id', Auth::id())
+        ->firstOrFail();
 
-        return view('orders.show', compact('order'));
+    $snapToken = null;
+
+    // Hanya generate token jika status pending
+    if ($order->status === 'pending') {
+        \Midtrans\Config::$serverKey = config('midtrans.server_key');
+        \Midtrans\Config::$isProduction = false; // Sandbox
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
+
+        $params = [
+            'transaction_details' => [
+                'order_id' => $order->order_number . '-' . uniqid(),
+                'gross_amount' => $order->total_amount,
+            ],
+            'customer_details' => [
+                'first_name' => $order->shipping_name,
+                'phone' => $order->shipping_phone,
+            ],
+        ];
+
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
     }
+
+    return view('orders.show', compact('order', 'snapToken'));
+    }
+
     public function destroy($id)
     {
         $order = Order::where('id', $id)
@@ -42,5 +66,5 @@ class OrderController extends Controller
 
         return back()->with('success', 'Pesanan berhasil dihapus');
     }
-
+   
 }
