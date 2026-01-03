@@ -71,6 +71,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
             // Laporan Penjualan
             Route::get('/reports/sales', [\App\Http\Controllers\Admin\ReportController::class, 'sales'])->name('reports.sales');
+            Route::get('/reports/export-sales', [ReportController::class, 'exportSales'])->name('reports.export-sales');
         // Update status pesanan
         Route::patch('/orders/{order}/update-status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.update-status');
     // Dashboard
