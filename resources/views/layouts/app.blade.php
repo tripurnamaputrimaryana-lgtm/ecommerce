@@ -13,11 +13,6 @@ FUNGSI: Master layout untuk halaman customer/publik
     {{-- CSRF Token untuk AJAX --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- ... meta tags ... -->
-
-    @vite(['resources/css/app.css', 'resources/js/app.js']) {{-- Stack untuk
-    script tambahan dari child view --}} @stack('scripts')
-
     {{-- SEO Meta Tags --}}
     <title>@yield('title', 'Toko Online') - {{ config('app.name') }}</title>
     <meta name="description" content="@yield('meta_description', 'Toko online terpercaya dengan produk berkualitas')">
@@ -27,110 +22,101 @@ FUNGSI: Master layout untuk halaman customer/publik
 
     {{-- Google Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
-    {{-- Vite CSS --}}
+    {{-- Vite --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    {{-- Stack untuk CSS tambahan per halaman --}}
+    {{-- Stack CSS per halaman --}}
     @stack('styles')
 </head>
 
 <body>
-    {{-- ============================================
-    NAVBAR
-    ============================================ --}}
+
+    {{-- NAVBAR --}}
     @include('partials.navbar')
 
-    {{-- ============================================
-    FLASH MESSAGES
-    ============================================ --}}
+    {{-- FLASH MESSAGE --}}
     <div class="container mt-3">
         @include('partials.flash-messages')
     </div>
 
-    {{-- ============================================
-    MAIN CONTENT
-    ============================================ --}}
+    {{-- MAIN CONTENT --}}
     <main class="min-vh-100">
         @yield('content')
     </main>
 
-    {{-- ============================================
-    FOOTER
-    ============================================ --}}
+    {{-- FOOTER --}}
     @include('partials.footer')
 
-    {{-- Stack untuk JS tambahan per halaman --}}
-    @stack('scripts')
+    {{-- ================================
+        GLOBAL SCRIPT
+    ================================= --}}
     <script>
         /**
-       * Fungsi AJAX untuk Toggle Wishlist
-       * Menggunakan Fetch API (Modern JS) daripada jQuery.
-       */
-      async function toggleWishlist(productId) {
-        try {
-          // 1. Ambil CSRF token dari meta tag HTML
-          // Laravale mewajibkan token ini untuk setiap request POST demi keamanan.
-          const token = document.querySelector('meta[name="csrf-token"]').content;
+         * Toggle Wishlist AJAX
+         */
+        async function toggleWishlist(productId) {
+            try {
+                const token = document.querySelector('meta[name="csrf-token"]').content;
 
-          // 2. Kirim Request ke Server
-          const response = await fetch(`/wishlist/toggle/${productId}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-CSRF-TOKEN": token, // Tempel token di header
-            },
-          });
+                const response = await fetch(`/wishlist/toggle/${productId}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": token,
+                    },
+                });
 
-          // 3. Handle jika user belum login (Error 401 Unauthorized)
-          if (response.status === 401) {
-            window.location.href = "/login"; // Lempar ke halaman login
-            return;
-          }
+                if (response.status === 401) {
+                    window.location.href = "/login";
+                    return;
+                }
 
-          // 4. Baca respon JSON dari server
-          const data = await response.json();
+                const data = await response.json();
 
-          if (data.status === "success") {
-            // 5. Update UI tanpa reload halaman
-            updateWishlistUI(productId, data.added); // Ganti warna ikon
-            updateWishlistCounter(data.count); // Update angka di header
-            showToast(data.message); // Tampilkan notifikasi
-          }
-        } catch (error) {
-          console.error("Error:", error);
-          showToast("Terjadi kesalahan sistem.", "error");
+                if (data.status === "success") {
+                    updateWishlistUI(productId, data.added);
+                    updateWishlistCounter(data.count);
+                }
+            } catch (error) {
+                console.error("Wishlist Error:", error);
+            }
         }
-      }
 
-      function updateWishlistUI(productId, isAdded) {
-        // Cari semua tombol wishlist untuk produk ini (bisa ada di card & detail page)
-        const buttons = document.querySelectorAll(`.wishlist-btn-${productId}`);
+        function updateWishlistUI(productId, isAdded) {
+            const buttons = document.querySelectorAll(`.wishlist-btn-${productId}`);
 
-        buttons.forEach((btn) => {
-          const icon = btn.querySelector("i"); // Menggunakan tag <i> untuk Bootstrap Icons
-          if (isAdded) {
-            // Ubah jadi merah solid (Love penuh)
-            icon.classList.remove("bi-heart", "text-secondary");
-            icon.classList.add("bi-heart-fill", "text-danger");
-          } else {
-            // Ubah jadi abu-abu outline (Love kosong)
-            icon.classList.remove("bi-heart-fill", "text-danger");
-            icon.classList.add("bi-heart", "text-secondary");
-          }
-        });
-      }
+            buttons.forEach((btn) => {
+                const icon = btn.querySelector("i");
+                if (!icon) return;
 
-      function updateWishlistCounter(count) {
-        const badge = document.getElementById("wishlist-count");
-        if (badge) {
-          badge.innerText = count;
-          // Bootstrap badge display toggle logic
-          badge.style.display = count > 0 ? "inline-block" : "none";
+                if (isAdded) {
+                    icon.classList.remove("bi-heart", "text-secondary");
+                    icon.classList.add("bi-heart-fill", "text-danger");
+                } else {
+                    icon.classList.remove("bi-heart-fill", "text-danger");
+                    icon.classList.add("bi-heart", "text-secondary");
+                }
+            });
         }
-      }
+
+        function updateWishlistCounter(count) {
+            const badge = document.getElementById("wishlist-count");
+            if (!badge) return;
+
+            badge.innerText = count;
+            badge.style.display = count > 0 ? "inline-block" : "none";
+        }
     </script>
-</body>
 
+    {{-- ================================
+        SCRIPT DARI HALAMAN CHILD
+        (Termasuk Midtrans Snap)
+    ================================= --}}
+    @stack('scripts')
+
+</body>
 </html>

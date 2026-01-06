@@ -8,8 +8,6 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Cache;
-
 
 class CategoryController extends Controller
 {
@@ -18,18 +16,14 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        // Sebelum (Selalu Query DB)
-        // Setiap user refresh halaman, kita konek ke DB, query, ambil data, dan tutup koneksi. Boros!
-        $categories = Category::all();
+        // Mengambil data kategori dengan pagination.
+        // withCount('products'): Menghitung jumlah produk di setiap kategori.
+        // Teknik ini jauh lebih efisien daripada memanggil $category->products->count() di view (N+1 Problem).
+        $categories = Category::withCount('products')
+            ->latest()      // Urutkan dari yang terbaru (created_at desc)
+            ->paginate(10); // Batasi 10 item per halaman
 
-        // Sesudah (Cek Cache dulu)
-        // Logika:
-        // 1. Cek apakah ada data dengan key 'global_categories' di RAM (Cache)?
-        // 2. Jika ADA, kembalikan langsung (tanpa sentuh DB). Cepat!
-        // 3. Jika TIDAK ADA, jalankan function(), simpan hasilnya ke Cache selama 3600 detik (1 jam), lalu kembalikan.
-        $categories = Cache::remember('global_categories', 3600, function () {
-            return Category::withCount('products')->get(); // Sekalian Eager Load count produk
-        });
+        return view('admin.categories.index', compact('categories'));
     }
 
     /**
@@ -40,11 +34,11 @@ class CategoryController extends Controller
         // 1. Validasi Input
         $validated = $request->validate([
             // 'unique:categories': Pastikan nama belum dipakai di tabel categories
-            'name' => 'required|string|max:100|unique:categories',
+            'name'        => 'required|string|max:100|unique:categories',
             'description' => 'nullable|string|max:500',
             // Validasi file gambar (maks 1MB)
-            'image' => 'nullable|image|max:1024',
-            'is_active' => 'boolean',
+            'image'       => 'nullable|image|max:1024',
+            'is_active'   => 'boolean',
         ]);
 
         // 2. Handle Upload Gambar (Jika ada)
@@ -64,10 +58,6 @@ class CategoryController extends Controller
         Category::create($validated);
 
         return back()->with('success', 'Kategori berhasil ditambahkan!');
-
-        // CategoryController store/update/delete
-        Cache::forget('global_categories');
-
     }
 
     /**
@@ -80,10 +70,10 @@ class CategoryController extends Controller
             // PENTING: Pada validasi unique saat update, kita harus mengecualikan ID kategori ini sendiri.
             // Format: unique:table,column,except_id
             // Jika tidak dikecualikan, Laravel akan menganggap nama ini duplikat (karena sudah ada di DB milik record ini sendiri).
-            'name' => 'required|string|max:100|unique:categories,name,' . $category->id,
+            'name'        => 'required|string|max:100|unique:categories,name,' . $category->id,
             'description' => 'nullable|string|max:500',
-            'image' => 'nullable|image|max:1024',
-            'is_active' => 'boolean',
+            'image'       => 'nullable|image|max:1024',
+            'is_active'   => 'boolean',
         ]);
 
         // 2. Handle Ganti Gambar
@@ -105,8 +95,6 @@ class CategoryController extends Controller
         $category->update($validated);
 
         return back()->with('success', 'Kategori berhasil diperbarui!');
-        // CategoryController store/update/delete
-        Cache::forget('global_categories');
     }
 
     /**
@@ -131,13 +119,5 @@ class CategoryController extends Controller
         $category->delete();
 
         return back()->with('success', 'Kategori berhasil dihapus!');
-    }
-
-    public function show(Category $category)
-    {
-        return redirect()->route('admin.categories.index');
-    
-    // CategoryController store/update/delete
-    Cache::forget('global_categories');
     }
 }
