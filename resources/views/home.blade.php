@@ -1,6 +1,7 @@
 {{-- ================================================
 FILE: resources/views/home.blade.php
 FUNGSI: Halaman utama website
+THEME: Pink
 ================================================ --}}
 
 @extends('layouts.app')
@@ -8,8 +9,35 @@ FUNGSI: Halaman utama website
 @section('title', 'Beranda')
 
 @section('content')
+
+{{-- Custom Pink Theme --}}
+<style>
+    .pink-hero {
+        background: linear-gradient(135deg, #ff4f9a, #ff7fbf);
+        color: white;
+    }
+    .btn-pink {
+        background-color: #ff4f9a;
+        color: white;
+        border: none;
+    }
+    .btn-pink:hover {
+        background-color: #ff2f86;
+        color: white;
+    }
+    .pink-banner-1 {
+        background: #ffb3d9;
+        color: #7a004f;
+    }
+    .pink-banner-2 {
+        background: #ff4f9a;
+        color: white;
+    }
+</style>
+
+
 {{-- Hero Section --}}
-<section class="bg-primary text-white py-5">
+<section class="pink-hero py-5">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6">
@@ -32,10 +60,11 @@ FUNGSI: Halaman utama website
     </div>
 </section>
 
+
 {{-- Kategori --}}
 <section class="py-5">
     <div class="container">
-        <h2 class="text-center mb-4">Kategori Populer</h2>
+        <h2 class="text-center mb-4 text-pink">Kategori Populer</h2>
         <div class="row g-4">
             @foreach($categories as $category)
             <div class="col-6 col-md-4 col-lg-2">
@@ -55,12 +84,13 @@ FUNGSI: Halaman utama website
     </div>
 </section>
 
+
 {{-- Produk Unggulan --}}
-<section class="py-5 bg-light">
+<section class="py-5" style="background:#fff0f6;">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="mb-0">Produk Unggulan</h2>
-            <a href="{{ route('catalog.index') }}" class="btn btn-outline-primary">
+            <a href="{{ route('catalog.index') }}" class="btn btn-pink">
                 Lihat Semua <i class="bi bi-arrow-right"></i>
             </a>
         </div>
@@ -74,12 +104,13 @@ FUNGSI: Halaman utama website
     </div>
 </section>
 
+
 {{-- Promo Banner --}}
 <section class="py-5">
     <div class="container">
         <div class="row g-4">
             <div class="col-md-6">
-                <div class="card bg-warning text-dark border-0" style="min-height: 200px;">
+                <div class="card pink-banner-1 border-0" style="min-height: 200px;">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <h3>Flash Sale!</h3>
                         <p>Diskon hingga 50% untuk produk pilihan</p>
@@ -89,8 +120,9 @@ FUNGSI: Halaman utama website
                     </div>
                 </div>
             </div>
+
             <div class="col-md-6">
-                <div class="card bg-info text-white border-0" style="min-height: 200px;">
+                <div class="card pink-banner-2 border-0" style="min-height: 200px;">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <h3>Member Baru?</h3>
                         <p>Dapatkan voucher Rp 50.000 untuk pembelian pertama</p>
@@ -100,9 +132,11 @@ FUNGSI: Halaman utama website
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </section>
+
 
 {{-- Produk Terbaru --}}
 <section class="py-5">
@@ -117,4 +151,5 @@ FUNGSI: Halaman utama website
         </div>
     </div>
 </section>
+
 @endsection
