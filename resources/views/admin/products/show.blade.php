@@ -29,16 +29,25 @@
                     <div class="card-body p-3">
 
                         {{-- Primary Image --}}
-                        <img src="{{ asset('storage/'.$product->primaryImage?->image_path) }}"
-                            class="img-fluid rounded mb-3 w-100" style="object-fit:cover;max-height:320px">
+                        @if($product->primaryImage)
+                            <img src="{{ asset('storage/'.$product->primaryImage->image_path) }}"
+                                 class="img-fluid rounded mb-3 w-100"
+                                 style="object-fit:cover;max-height:320px">
+                        @else
+                            <div class="bg-light d-flex align-items-center justify-content-center rounded mb-3"
+                                 style="height:320px">
+                                <i class="bi bi-image fs-1 text-muted"></i>
+                            </div>
+                        @endif
 
                         {{-- Gallery --}}
                         <div class="row g-2">
                             @foreach($product->images as $image)
-                            <div class="col-4">
-                                <img src="{{ asset('storage/'.$image->image_path) }}" class="img-fluid rounded border"
-                                    style="object-fit:cover;height:90px;width:100%">
-                            </div>
+                                <div class="col-4">
+                                    <img src="{{ asset('storage/'.$image->image_path) }}"
+                                         class="img-fluid rounded border"
+                                         style="object-fit:cover;height:90px;width:100%">
+                                </div>
                             @endforeach
                         </div>
 
@@ -57,16 +66,18 @@
 
                         <p class="text-muted mb-2">
                             <i class="bi bi-tags me-1"></i>
-                            {{ $product->category->name }}
+                            {{ $product->category->name ?? '-' }}
                         </p>
 
-                        {{-- Price --}}
+                        {{-- ================= PRICE (FIXED) ================= --}}
                         <h5 class="text-primary fw-bold mb-3">
-                            Rp {{ number_format($product->discount_price, 0, ',', '.') }}
-                            @if($product->discount_price)
-                            <span class="text-muted fs-6 text-decoration-line-through ms-2">
+                            @if($product->discount_price && $product->discount_price > 0)
+                                Rp {{ number_format($product->discount_price, 0, ',', '.') }}
+                                <span class="text-muted fs-6 text-decoration-line-through ms-2">
+                                    Rp {{ number_format($product->price, 0, ',', '.') }}
+                                </span>
+                            @else
                                 Rp {{ number_format($product->price, 0, ',', '.') }}
-                            </span>
                             @endif
                         </h5>
 
@@ -77,9 +88,9 @@
                             </span>
 
                             @if($product->is_featured)
-                            <span class="badge bg-warning text-dark">
-                                <i class="bi bi-star-fill me-1"></i> Unggulan
-                            </span>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="bi bi-star-fill me-1"></i> Unggulan
+                                </span>
                             @endif
                         </div>
 
@@ -87,7 +98,7 @@
 
                         {{-- Description --}}
                         <p class="mb-4">
-                            {!! $product->description ?: '-' !!}
+                            {!! $product->description ?: '<span class="text-muted">Tidak ada deskripsi</span>' !!}
                         </p>
 
                         {{-- Meta --}}
