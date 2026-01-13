@@ -49,7 +49,7 @@ class UpdateProductRequest extends FormRequest
             'images.*'       => [
                 'image',
                 'mimes:jpg,png,webp',
-                'max:2048',
+                'max:5120',
             ],
         ];
     }

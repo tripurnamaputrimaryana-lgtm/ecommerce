@@ -6,7 +6,7 @@ FUNGSI: Komponen kartu produk yang reusable
 <div class="card product-card h-100 border-0 shadow-sm">
     {{-- Product Image --}}
     <div class="position-relative">
-        <a href="{{ route('catalog.show', $product->slug) }}">
+        <a href="{{ route('daftarproduk.show', $product->slug) }}">
             <img src="{{ $product->image_url }}" class="card-img-top" alt="{{ $product->name }}"
                 style="height: 200px; object-fit: cover;">
         </a>
@@ -34,7 +34,7 @@ FUNGSI: Komponen kartu produk yang reusable
 
         {{-- Product Name --}}
         <h6 class="card-title mb-2">
-            <a href="{{ route('catalog.show', $product->slug) }}" class="text-decoration-none text-dark stretched-link">
+            <a href="{{ route('daftarproduk.show', $product->slug) }}" class="text-decoration-none text-dark stretched-link">
                 {{ Str::limit($product->name, 40) }}
             </a>
         </h6>

@@ -2,60 +2,57 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
 use Illuminate\Database\Seeder;
+use App\Models\Category;
 use Illuminate\Support\Str;
 
 class CategorySeeder extends Seeder
 {
     public function run(): void
     {
-        $categories = [
+        Category::insert([
             [
+                'id' => 1,
                 'name' => 'Floral',
-                'slug' => 'floral',
-                'description' => 'Aroma bunga yang lembut, romantis, dan feminin',
-                'is_active' => true,
+                'slug' => Str::slug('Floral'),
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
-                'name' => 'Woody',
-                'slug' => 'woody',
-                'description' => 'Aroma kayu yang hangat, elegan, dan maskulin',
-                'is_active' => true,
+                'id' => 2,
+                'name' => 'Citrus/Fresh',
+                'slug' => Str::slug('Citrus Fresh'),
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
-                'name' => 'Oriental',
-                'slug' => 'oriental',
-                'description' => 'Aroma eksotis dengan sentuhan rempah dan manis',
-                'is_active' => true,
-            ],
-            [
-                'name' => 'Fresh / Citrus',
-                'slug' => 'fresh-citrus',
-                'description' => 'Aroma segar dari jeruk dan buah citrus',
-                'is_active' => true,
-            ],
-            [
+                'id' => 3,
                 'name' => 'Aquatic',
-                'slug' => 'aquatic',
-                'description' => 'Aroma segar seperti laut dan air',
-                'is_active' => true,
+                'slug' => Str::slug('Aquatic'),
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
+                'id' => 4,
                 'name' => 'Gourmand',
-                'slug' => 'gourmand',
-                'description' => 'Aroma manis seperti vanila, coklat, dan dessert',
-                'is_active' => true,
+                'slug' => Str::slug('Gourmand'),
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
-        ];
-
-        foreach ($categories as $category) {
-            Category::updateOrCreate(
-                ['slug' => $category['slug']],
-                $category
-            );
-        }
-
-        $this->command->info('✅ Categories seeded successfully!');
+            [
+                'id' => 5,
+                'name' => 'Oriental',
+                'slug' => Str::slug('Oriental'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => 6,
+                'name' => 'Woody',
+                'slug' => Str::slug('Woody'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
     }
 }

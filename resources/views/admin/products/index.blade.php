@@ -3,13 +3,36 @@
 @section('title', 'Daftar Produk')
 
 @section('content')
+
+<style>
+:root {
+    --pink-main: #ff4f9a;
+    --pink-soft: #fff1f7;
+    --pink-dark: #b1124d;
+}
+
+.bg-pink {
+    background: linear-gradient(135deg, #ff4f9a, #ff7fbf);
+}
+
+.btn-pink {
+    background: var(--pink-main);
+    color: #fff;
+}
+
+.btn-pink:hover {
+    background: #ff2f86;
+    color: #fff;
+}
+</style>
+
 <div class="row justify-content-center">
     <div class="col-lg-12">
 
         <div class="card shadow-sm border-0 mb-4">
 
             {{-- CARD HEADER --}}
-            <div class="card-header bg-primary bg-gradient text-white d-flex justify-content-between align-items-center">
+            <div class="card-header bg-pink text-white d-flex justify-content-between align-items-center">
                 <div>
                     <h5 class="mb-0 fw-bold">
                         <i class="bi bi-box-seam me-2"></i> Daftar Produk
@@ -23,24 +46,28 @@
             </div>
 
             {{-- FILTER --}}
-            <div class="card-body border-bottom">
+            <div class="card-body border-bottom bg-white">
                 <form method="GET" class="row g-2">
                     <div class="col-md-4">
-                        <input type="text" name="search" class="form-control" placeholder="Cari produk..."
+                        <input type="text" name="search" class="form-control"
+                            placeholder="Cari produk..."
                             value="{{ request('search') }}">
                     </div>
+
                     <div class="col-md-4">
                         <select name="category" class="form-select">
                             <option value="">Semua Kategori</option>
                             @foreach($categories as $category)
-                            <option value="{{ $category->id }}" {{ request('category')==$category->id ? 'selected' : '' }}>
-                                {{ $category->name }}
-                            </option>
+                                <option value="{{ $category->id }}"
+                                    {{ request('category')==$category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
+
                     <div class="col-md-2">
-                        <button class="btn btn-outline-primary w-100">
+                        <button class="btn btn-pink w-100">
                             <i class="bi bi-filter"></i> Filter
                         </button>
                     </div>
@@ -61,13 +88,16 @@
                                 <th class="text-end pe-4">Aksi</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             @forelse($products as $product)
                             <tr>
                                 <td class="ps-4">
                                     <div class="d-flex align-items-center">
                                         <img src="{{ $product->primaryImage?->image_url ?? asset('img/no-image.png') }}"
-                                            class="rounded border me-3" width="44" height="44">
+                                            class="rounded border me-3"
+                                            width="44" height="44">
+
                                         <div>
                                             <div class="fw-bold">{{ $product->name }}</div>
                                             <small class="text-muted">SKU: {{ $product->sku ?? '-' }}</small>
@@ -82,36 +112,56 @@
                                 </td>
 
                                 <td class="text-center">
-                                    <span class="badge bg-info-subtle text-info px-3 py-2">
+                                    <span class="badge bg-pink-subtle text-danger px-3 py-2">
                                         {{ $product->stock }}
                                     </span>
                                 </td>
 
                                 <td class="text-center">
                                     @if($product->is_active)
-                                    <span class="badge bg-success-subtle text-success px-3 py-2">
-                                        <i class="bi bi-check-circle me-1"></i> Aktif
-                                    </span>
+                                        <span class="badge bg-success-subtle text-success px-3 py-2">
+                                            <i class="bi bi-check-circle me-1"></i> Aktif
+                                        </span>
                                     @else
-                                    <span class="badge bg-secondary-subtle text-secondary px-3 py-2">
-                                        <i class="bi bi-x-circle me-1"></i> Nonaktif
-                                    </span>
+                                        <span class="badge bg-secondary-subtle text-secondary px-3 py-2">
+                                            <i class="bi bi-x-circle me-1"></i> Nonaktif
+                                        </span>
                                     @endif
                                 </td>
 
+                                {{-- AKSI --}}
                                 <td class="text-end pe-4">
                                     <div class="btn-group">
+
                                         <a href="{{ route('admin.products.show', $product) }}"
-                                            class="btn btn-sm btn-outline-info" title="Detail">
+                                            class="btn btn-sm btn-outline-info"
+                                            title="Detail">
                                             <i class="bi bi-eye"></i>
                                         </a>
+
                                         <a href="{{ route('admin.products.edit', $product) }}"
-                                            class="btn btn-sm btn-outline-warning" title="Edit">
+                                            class="btn btn-sm btn-outline-warning"
+                                            title="Edit">
                                             <i class="bi bi-pencil"></i>
                                         </a>
+                                        {{-- DELETE --}}
+                                        <form action="{{ route('admin.products.destroy', $product) }}"
+                                            method="POST"
+                                            onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit"
+                                                class="btn btn-sm btn-outline-danger"
+                                                title="Hapus">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+
                                     </div>
                                 </td>
                             </tr>
+
                             @empty
                             <tr>
                                 <td colspan="6" class="text-center py-5 text-muted">
@@ -133,4 +183,5 @@
         </div>
     </div>
 </div>
+
 @endsection

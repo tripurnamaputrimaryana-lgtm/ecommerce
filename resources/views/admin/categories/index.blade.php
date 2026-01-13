@@ -111,10 +111,10 @@
             {{-- CARD HEADER --}}
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <div>
-                    <h5 class="mb-0 fw-bold text-white">
+                    <h5 class="mb-0 fw-bold text-black">
                         <i class="bi bi-tags me-2"></i> Manajemen Kategori
                     </h5>
-                    <small class="opacity-75 text-white">Kelola kategori produk</small>
+                    <small class="opacity-75 text-black">Kelola kategori produk</small>
                 </div>
 
                 <button class="btn btn-light btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#createModal">
@@ -148,11 +148,11 @@
                                                 'floral' => 'bi-flower1',
                                                 'woody' => 'bi-tree-fill',
                                                 'oriental' => 'bi-fire',
-                                                'fresh-citrus' => 'bi-brightness-high',
+                                                'fresh-citrus' => 'bi-sun',
                                                 'aquatic' => 'bi-droplet-half',
                                                 'gourmand' => 'bi-cup-hot-fill',
                                             ];
-                                            $icon = $icons[$category->slug] ?? 'bi-tags';
+                                            $icon = $icons[$category->slug] ?? 'bi-sun';
                                         @endphp
                                         <div class="bg-primary-subtle text-pink rounded-circle
                                                     d-flex align-items-center justify-content-center me-3"
@@ -305,7 +305,7 @@
                 <button type="submit" class="btn btn-pink">
                     <i class="bi bi-save me-1"></i> Simpan
                 </button>
-            </div>
+            </div>  
         </form>
     </div>
 </div>

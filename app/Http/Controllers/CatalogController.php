@@ -92,7 +92,7 @@ class CatalogController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('catalog.index', compact('products', 'categories'));
+        return view('daftarproduk.index', compact('products', 'categories'));
     }
 
     /**
@@ -124,6 +124,6 @@ class CatalogController extends Controller
             ->take(4)
             ->get();
 
-        return view('catalog.show', compact('product', 'relatedProducts'));
+        return view('daftarproduk.show', compact('product', 'relatedProducts'));
     }
 }

@@ -3,6 +3,59 @@
 @section('title', 'Detail Pesanan #' . $order->order_number)
 
 @section('content')
+
+<style>
+    :root {
+        --pink-main: #ff4f9a;
+        --pink-soft: #fff1f7;
+        --pink-dark: #b1124d;
+    }
+
+    /* Card Header */
+    .card-header h5,
+    .card-header h6 {
+        color: var(--pink-dark);
+    }
+
+    /* Total Price */
+    .text-primary {
+        color: var(--pink-main) !important;
+    }
+
+    /* Button */
+    .btn-primary {
+        background: linear-gradient(135deg, var(--pink-main), #ff85b8);
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #ff2f8f, #ff6fb1);
+    }
+
+    /* Select */
+    .form-select:focus {
+        border-color: var(--pink-main);
+        box-shadow: 0 0 0 0.2rem rgba(255, 79, 154, 0.25);
+    }
+
+    /* Card Light */
+    .bg-light {
+        background-color: var(--pink-soft) !important;
+    }
+
+    /* Alert */
+    .alert-danger {
+        background-color: #ffe3ed;
+        color: var(--pink-dark);
+        border-color: #ffb6d5;
+    }
+
+    /* Price Highlight */
+    .fw-bold {
+        color: #444;
+    }
+</style>
+
 <div class="row">
     <div class="col-lg-8">
         {{-- List Item --}}
@@ -12,11 +65,13 @@
             </div>
             <div class="card-body">
                 @foreach($order->items as $item)
-                    <div class="d-flex mb-3">
+                    <div class="d-flex mb-3 align-items-center">
                         <img src="{{ $item->product->image_url }}" class="rounded me-3" style="width: 60px; height: 60px; object-fit: cover;">
                         <div class="flex-grow-1">
                             <h6 class="mb-0 fw-bold">{{ $item->product->name }}</h6>
-                            <small class="text-muted">{{ $item->quantity }} x Rp {{ number_format($item->price, 0, ',', '.') }}</small>
+                            <small class="text-muted">
+                                {{ $item->quantity }} x Rp {{ number_format($item->price, 0, ',', '.') }}
+                            </small>
                         </div>
                         <div class="fw-bold">
                             Rp {{ number_format($item->quantity * $item->price, 0, ',', '.') }}
@@ -26,7 +81,9 @@
                 <hr>
                 <div class="d-flex justify-content-between fs-5 fw-bold">
                     <span>Total Pembayaran</span>
-                    <span class="text-primary">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</span>
+                    <span class="text-primary">
+                        Rp {{ number_format($order->total_amount, 0, ',', '.') }}
+                    </span>
                 </div>
             </div>
         </div>
@@ -48,12 +105,16 @@
         <div class="card shadow-sm border-0 bg-light">
             <div class="card-body">
                 <h6 class="fw-bold mb-3">Update Status Order</h6>
+
                 <form action="{{ route('admin.orders.update-status', $order) }}" method="POST">
                     @csrf
                     @method('PATCH')
 
                     <div class="mb-3">
-                        <label class="form-label small text-muted">Status Saat Ini: <strong>{{ ucfirst($order->status) }}</strong></label>
+                        <label class="form-label small text-muted">
+                            Status Saat Ini:
+                            <strong>{{ ucfirst($order->status) }}</strong>
+                        </label>
                         <select name="status" class="form-select">
                             <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending</option>
                             <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>Processing (Sedang Dikemas)</option>
@@ -70,7 +131,8 @@
 
                 @if($order->status == 'cancelled')
                     <div class="alert alert-danger mt-3 mb-0 small">
-                        <i class="bi bi-info-circle"></i> Pesanan ini telah dibatalkan. Stok produk telah dikembalikan otomatis.
+                        <i class="bi bi-info-circle"></i>
+                        Pesanan ini telah dibatalkan. Stok produk telah dikembalikan otomatis.
                     </div>
                 @endif
             </div>

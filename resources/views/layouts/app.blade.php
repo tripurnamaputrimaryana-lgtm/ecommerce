@@ -14,7 +14,7 @@ FUNGSI: Master layout untuk halaman customer/publik
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- SEO Meta Tags --}}
-    <title>@yield('title', 'Toko Online') - {{ config('app.name') }}</title>
+    <title>@yield('title', 'Maryana Store') - {{ config('app.name') }}</title>
     <meta name="description" content="@yield('meta_description', 'Toko online terpercaya dengan produk berkualitas')">
 
     {{-- Favicon --}}

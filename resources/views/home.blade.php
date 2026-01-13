@@ -1,7 +1,7 @@
 {{-- ================================================
 FILE: resources/views/home.blade.php
 FUNGSI: Halaman utama website
-THEME: Pink
+THEME: Pink Elegant Premium (Hero Slider + Icon Category)
 ================================================ --}}
 
 @extends('layouts.app')
@@ -10,73 +10,226 @@ THEME: Pink
 
 @section('content')
 
-{{-- Custom Pink Theme --}}
 <style>
-    .pink-hero {
-        background: linear-gradient(135deg, #ff4f9a, #ff7fbf);
-        color: white;
+:root {
+    --pink-main: #ff4f9a;
+    --pink-soft: #fff1f7;
+    --pink-dark: #b1124d;
+}
+
+body { background-color: #fffafb; }
+section { position: relative; }
+
+h2 {
+    font-weight: 800;
+    color: var(--pink-dark);
+    letter-spacing: -.6px;
+}
+
+.section-desc {
+    color: #888;
+    font-size: 15px;
+}
+
+/* ================= HERO ================= */
+.pink-hero {
+    position: relative;
+    height: 90vh;
+    min-height: 520px;
+    overflow: hidden;
+    color: #fff;
+}
+
+/* SLIDER */
+.hero-slider {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transform: scale(1.08);
+    transition: opacity 1.2s ease, transform 6s ease;
+}
+
+.hero-slide.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* OVERLAY */
+.hero-slider::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        rgba(255,79,154,.6),
+        rgba(255,154,203,.6)
+    );
+}
+
+/* CONTENT */
+.hero-content {
+    position: relative;
+    z-index: 3;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 600;
+    margin-bottom: 18px;
+    text-shadow: 0 10px 24px rgba(0,0,0,.35);
+}
+
+.hero-desc {
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(255,255,255,.95);
+    max-width: 520px;
+    margin: 0 auto 28px;
+}
+
+/* BUTTON HERO */
+.btn-hero {
+    background: linear-gradient(135deg, #ff4f9a, #ff7fbf);
+    color: #fff;
+    border-radius: 50px;
+    padding: 14px 38px;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 12px 28px rgba(255,79,154,.45);
+    transition: all .35s ease;
+}
+
+.btn-hero:hover {
+    background: linear-gradient(135deg, #ff2f86, #ff6ab2);
+    transform: translateY(-3px);
+    box-shadow: 0 18px 36px rgba(255,79,154,.55);
+    color: #fff;
+}
+
+/* ================= CATEGORY ICON ================= */
+.category-icon-card {
+    border-radius: 22px;
+    transition: all .35s ease;
+}
+
+.category-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff4f9a, #ff7fbf);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 34px;
+    box-shadow: 0 12px 26px rgba(255,79,154,.35);
+}
+
+.category-icon-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 36px rgba(0,0,0,.15);
+}
+
+.category-icon-card:hover .category-icon {
+    transform: scale(1.08);
+}
+
+/* SECTION */
+.featured-section {
+    background: var(--pink-soft);
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 36px;
     }
-    .btn-pink {
-        background-color: #ff4f9a;
-        color: white;
-        border: none;
-    }
-    .btn-pink:hover {
-        background-color: #ff2f86;
-        color: white;
-    }
-    .pink-banner-1 {
-        background: #ffb3d9;
-        color: #7a004f;
-    }
-    .pink-banner-2 {
-        background: #ff4f9a;
-        color: white;
-    }
+}
 </style>
 
+{{-- ================= HERO ================= --}}
+<section class="pink-hero">
+    <div class="hero-slider" id="heroSlider">
+        <div class="hero-slide active" style="background-image:url('/assets/images/4.jpg')"></div>
+        <div class="hero-slide" style="background-image:url('/assets/images/2.jpg')"></div>
+        <div class="hero-slide" style="background-image:url('/assets/images/5.jpg')"></div>
+    </div>
 
-{{-- Hero Section --}}
-<section class="pink-hero py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-3">
-                    Belanja Online Mudah & Terpercaya
-                </h1>
-                <p class="lead mb-4">
-                    Temukan berbagai produk berkualitas dengan harga terbaik.
-                    Gratis ongkir untuk pembelian pertama!
-                </p>
-                <a href="{{ route('catalog.index') }}" class="btn btn-light btn-lg">
-                    <i class="bi bi-bag me-2"></i>Mulai Belanja
-                </a>
-            </div>
-            <div class="col-lg-6 d-none d-lg-block text-center">
-                <img src="{{ asset('images/logo.png') }}" alt="Shopping" class="img-fluid"
-                    style="max-height: 400px;">
-            </div>
+    <div class="container hero-content">
+        <div>
+            <h1 class="hero-title">Belanja Premium & Elegan</h1>
+            <p class="hero-desc">
+                Pengalaman belanja dengan koleksi terpilih,
+                kualitas terbaik, serta layanan terpercaya untuk Anda.
+            </p>
+
+            <a href="{{ route('daftarproduk.index') }}" class="btn btn-hero">
+                <i class="bi bi-bag-heart me-2"></i>
+                Mulai Berbelanja
+            </a>
         </div>
     </div>
 </section>
 
-
-{{-- Kategori --}}
+{{-- ================= KATEGORI (ICON) ================= --}}
 <section class="py-5">
     <div class="container">
-        <h2 class="text-center mb-4 text-pink">Kategori Populer</h2>
-        <div class="row g-4">
+        <h2 class="text-center mb-2">Kategori Populer</h2>
+        <p class="text-center section-desc mb-4">
+            Kategori favorit pilihan pelanggan
+        </p>
+
+        @php
+            $icons = [
+                'floral'        => 'bi-flower1',
+                'woody'         => 'bi-tree-fill',
+                'oriental'      => 'bi-fire',
+                'fresh-citrus'  => 'bi-brightness-high',
+                'aquatic'       => 'bi-droplet-half',
+                'gourmand'      => 'bi-cup-hot-fill',
+            ];
+        @endphp
+
+        <div class="row g-4 justify-content-center">
             @foreach($categories as $category)
+            @php
+                $icon = $icons[$category->slug] ?? 'bi-brightness-high';
+            @endphp
+
             <div class="col-6 col-md-4 col-lg-2">
-                <a href="{{ route('catalog.index', ['category' => $category->slug]) }}" class="text-decoration-none">
-                    <div class="card border-0 shadow-sm text-center h-100">
+                <a href="{{ route('daftarproduk.index',['category'=>$category->slug]) }}"
+                   class="text-decoration-none">
+
+                    <div class="card border-0 shadow-sm text-center h-100 category-icon-card">
                         <div class="card-body">
-                            <img src="{{ $category->image_url }}" alt="{{ $category->name }}"
-                                class="rounded-circle mb-3" width="80" height="80" style="object-fit: cover;">
-                            <h6 class="card-title mb-0">{{ $category->name }}</h6>
-                            <small class="text-muted">{{ $category->products_count }} produk</small>
+                            <div class="category-icon">
+                                <i class="bi {{ $icon }}"></i>
+                            </div>
+
+                            <h6 class="fw-semibold text-dark mb-1">
+                                {{ $category->name }}
+                            </h6>
+
+                            <small class="text-muted">
+                                {{ $category->products_count }} produk
+                            </small>
                         </div>
                     </div>
+
                 </a>
             </div>
             @endforeach
@@ -84,72 +237,58 @@ THEME: Pink
     </div>
 </section>
 
+{{-- ================= PRODUK TERBARU ================= --}}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-4">
+            <span class="badge-soft">
+                <i class="bi bi-stars me-1"></i>New Arrival
+            </span>
+            <h2 class="mt-2">Produk Terbaru</h2>
+            <p class="section-desc">Koleksi parfum terbaru pilihan terbaik</p>
+        </div>
+        <div class="divider"></div>
 
-{{-- Produk Unggulan --}}
-<section class="py-5" style="background:#fff0f6;">
+        <div class="row g-4">
+            @foreach($latestProducts as $product)
+            <div class="col-6 col-md-4 col-lg-3 product-hover">
+                @include('partials.product-card',['product'=>$product])
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+{{-- ================= PRODUK UNGGULAN ================= --}}
+<section class="py-5 featured-section">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="mb-0">Produk Unggulan</h2>
-            <a href="{{ route('catalog.index') }}" class="btn btn-pink">
+            <h2>Produk Unggulan</h2>
+            <a href="{{ route('daftarproduk.index') }}" class="btn btn-pink">
                 Lihat Semua <i class="bi bi-arrow-right"></i>
             </a>
         </div>
+
         <div class="row g-4">
             @foreach($featuredProducts as $product)
             <div class="col-6 col-md-4 col-lg-3">
-                @include('partials.product-card', ['product' => $product])
+                @include('partials.product-card',['product'=>$product])
             </div>
             @endforeach
         </div>
     </div>
 </section>
 
+{{-- ================= JS SLIDER ================= --}}
+<script>
+const slides = document.querySelectorAll('.hero-slide');
+let index = 0;
 
-{{-- Promo Banner --}}
-<section class="py-5">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-md-6">
-                <div class="card pink-banner-1 border-0" style="min-height: 200px;">
-                    <div class="card-body d-flex flex-column justify-content-center">
-                        <h3>Flash Sale!</h3>
-                        <p>Diskon hingga 50% untuk produk pilihan</p>
-                        <a href="#" class="btn btn-dark" style="width: fit-content;">
-                            Lihat Promo
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card pink-banner-2 border-0" style="min-height: 200px;">
-                    <div class="card-body d-flex flex-column justify-content-center">
-                        <h3>Member Baru?</h3>
-                        <p>Dapatkan voucher Rp 50.000 untuk pembelian pertama</p>
-                        <a href="{{ route('register') }}" class="btn btn-light" style="width: fit-content;">
-                            Daftar Sekarang
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-
-{{-- Produk Terbaru --}}
-<section class="py-5">
-    <div class="container">
-        <h2 class="text-center mb-4">Produk Terbaru</h2>
-        <div class="row g-4">
-            @foreach($latestProducts as $product)
-            <div class="col-6 col-md-4 col-lg-3">
-                @include('partials.product-card', ['product' => $product])
-            </div>
-            @endforeach
-        </div>
-    </div>
-</section>
+setInterval(() => {
+    slides.forEach(s => s.classList.remove('active'));
+    slides[index].classList.add('active');
+    index = (index + 1) % slides.length;
+}, 5000);
+</script>
 
 @endsection

@@ -18,7 +18,7 @@
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
 
                 {{-- 🔎 Form Search --}}
-                <form action="{{ route('catalog.index') }}" method="GET" class="d-flex me-3">
+                <form action="{{ route('daftarproduk.index') }}" method="GET" class="d-flex me-3">
                     <input type="text" name="q" class="form-control form-control-sm border-pink"
                            placeholder="Search..." value="{{ request('q') }}">
                     <button type="submit" class="btn btn-pink btn-sm ms-2">
@@ -63,7 +63,6 @@
     </nav>
 
     <style>
-        /* Navbar Pink Theme */
         .pink-navbar {
             background: light;
         }

@@ -17,7 +17,7 @@
     <div class="card-body d-flex flex-column">
         <small class="text-muted mb-1">{{ $product->category->name }}</small>
         <h6 class="card-title mb-2">
-            <a href="{{ route('catalog.show', $product->slug) }}" class="text-decoration-none text-dark stretched-link">
+            <a href="{{ route('daftarproduk.show', $product->slug) }}" class="text-decoration-none text-dark stretched-link">
                 {{ $product->name }}
             </a>
         </h6>

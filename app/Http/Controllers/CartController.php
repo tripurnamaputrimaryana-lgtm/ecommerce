@@ -22,6 +22,7 @@ class CartController extends Controller
 
     $cartItems = $cart->items->map(function ($item) {
         return [
+            'id' => $item->id,
             'product' => $item->product,
             'quantity' => $item->quantity,
             'subtotal' => $item->quantity * $item->product->display_price,
